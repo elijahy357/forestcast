@@ -1,4 +1,18 @@
-# Thinning response function
+#' Thinning response function
+#'
+#' A helper function for genlob that calculates the growth response to a thin.
+#'
+#' @param age A positive integer. Current age.
+#' @param thin_age A positive integer. Age at which a thin took place.
+#' @param thin_ratio A number between 0 and 1.
+#'    Basal area before thinning divided by basal area after thinning.
+#' @param r A number. Rate parameter for thinning effect.
+#' @param k A positive number. Duration parameter for thinning effect.
+#'
+#' @returns A number, likely 1.X, the growth response multiplier to thinning at that age.
+#' @export
+#'
+#' @examples thin_response(20, 15, 0.5, 0.1190, 30.8038)
 thin_response <- function(age, thin_age, thin_ratio, r, k) {
   response <- ifelse(age - thin_age > k | age - thin_age < 0, 1,
                      (1/thin_ratio)^((r*(k*(age-thin_age) - (age-thin_age)^2)) / age^2))
@@ -9,7 +23,23 @@ thin_response <- function(age, thin_age, thin_ratio, r, k) {
   return(response)
 }
 
-# Fertilization response function
+#' Fertilization response function
+#'
+#' A helper function for genlob that calculates the growth response to a fertilization.
+#'
+#' @param age A positive integer. Current age.
+#' @param fert_age A positive integer. Age at which a fertilization took place.
+#' @param N A positive number. Kilograms of nitrogen applied per hectare.
+#' @param P TRUE or FALSE. Whether phosphorous was applied.
+#' @param delta0 A number. Intercept for response to phosphorous.
+#' @param delta1 A number. Parameter for response to phosphorous.
+#' @param beta A number. Scale parameter for response function.
+#' @param gamma A number. Shape parameter for response function.
+#'
+#' @returns A number, likely 1.X, the growth response multiplier to fertilization at that age.
+#' @export
+#'
+#' @examples fert_response(20, 15, 221, TRUE, 0.000256, 0.000192, 7.7046, 2.9453)
 fert_response <- function(age, fert_age, N, P, delta0, delta1, beta, gamma = 1) {
   yst <- age - fert_age
   response <- ifelse(yst <= 0, 1,
@@ -23,7 +53,7 @@ fert_response <- function(age, fert_age, N, P, delta0, delta1, beta, gamma = 1) 
   return(response)
 }
 
-#' Calculates trees per hectare, basal area, and height from age1 to age2
+#' Calculates number of trees, basal area, and height from age1 to age2
 #'
 #' Takes into account growth response to fertilization and thinning.
 #' Can run multiple scenarios by providing a vector of inputs,
@@ -78,11 +108,18 @@ fert_response <- function(age, fert_age, N, P, delta0, delta1, beta, gamma = 1) 
 #' @export
 #'
 #' @examples
+#' # Basic stand with no management
 #' genlob(age1 = 10, age2 = 30, n = 1000, ht = 10, ba = 10, site_index = 18)
 #'
+#' # Specifying multiple scenarios:
+#' # Scenario 1 no thin, 112 kg of nitrogen applied per hectare at age 15.
+#' # Scenario 2 no thin, 224 kg of nitrogen applied per hectare at age 15.
+#' # Scenario 3 thin down to 50% of the basal area at age 15, no fertilization.
+#' # Scenario 4 thin down to 40% of the basal area at age 15.
+#' #     336 kg of kg of nitrogen applied per hectare at age 15
 #' genlob(age1 = 10, age2 = 30, n = 1000, ht = 10, ba = 10, site_index = 18,
-#' thin_age = c(NA, NA, 15, 15), thin_ratio = c(1, 1, 0.5, 0.4),
-#' fert_age = c(15, 15, NA, 15), kgNperha = c(112, 224, 0, 336), P = F)
+#'        thin_age = c(NA, NA, 15, 15), thin_ratio = c(1, 1, 0.5, 0.4),
+#'        fert_age = c(15, 15, NA, 15), kgNperha = c(112, 224, 0, 336), P = FALSE)
 #'
 genlob <- function(
     # User inputs

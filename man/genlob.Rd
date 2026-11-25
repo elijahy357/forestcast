@@ -2,7 +2,7 @@
 % Please edit documentation in R/genlob.R
 \name{genlob}
 \alias{genlob}
-\title{Calculates trees per hectare, basal area, and height from age1 to age2}
+\title{Calculates number of trees, basal area, and height from age1 to age2}
 \usage{
 genlob(
   age1,
@@ -101,10 +101,17 @@ Model from paper by Gyawali and Burkhart, 2015.
 Trained on loblolly pine plantation data in the southeastern US, ages 8 to 25.
 }
 \examples{
+# Basic stand with no management
 genlob(age1 = 10, age2 = 30, n = 1000, ht = 10, ba = 10, site_index = 18)
 
+# Specifying multiple scenarios:
+# Scenario 1 no thin, 112 kg of nitrogen applied per hectare at age 15.
+# Scenario 2 no thin, 224 kg of nitrogen applied per hectare at age 15.
+# Scenario 3 thin down to 50\% of the basal area at age 15, no fertilization.
+# Scenario 4 thin down to 40\% of the basal area at age 15.
+#     336 kg of kg of nitrogen applied per hectare at age 15
 genlob(age1 = 10, age2 = 30, n = 1000, ht = 10, ba = 10, site_index = 18,
-thin_age = c(NA, NA, 15, 15), thin_ratio = c(1, 1, 0.5, 0.4),
-fert_age = c(15, 15, NA, 15), kgNperha = c(112, 224, 0, 336), P = F)
+       thin_age = c(NA, NA, 15, 15), thin_ratio = c(1, 1, 0.5, 0.4),
+       fert_age = c(15, 15, NA, 15), kgNperha = c(112, 224, 0, 336), P = FALSE)
 
 }
