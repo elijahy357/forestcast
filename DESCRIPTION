@@ -1,0 +1,15 @@
+Package: forestcast
+Title: Stand-Level Forest Growth and Yield Modeling
+Version: 0.0.0.9000
+Authors@R: 
+    person("Elijah", "Young", , "edyoung2@ncsu.edu", role = c("aut", "cre"))
+Description: Compare multiple models that predict future forest metrics at 
+    the stand level, with a focus on intensively managed loblolly pine in the
+    Southeastern US.
+License: MIT + file LICENSE
+Config/roxygen2/version: 8.1.1
+Encoding: UTF-8
+Roxygen: list(markdown = TRUE)
+Suggests: 
+    testthat (>= 3.0.0)
+Config/testthat/edition: 3
